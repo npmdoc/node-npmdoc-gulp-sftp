@@ -1,17 +1,40 @@
 {
-    "buildNpmdoc":"gulp-sftp",
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "buildNpmdoc": "gulp-sftp",
+    "description": "api documentation for [gulp-sftp (v0.1.5)](https://github.com/gtg092x/gulp-sftp/) [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-sftp.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-sftp) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-sftp.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-sftp)",
     "devDependencies": {
-        "gulp-sftp": "*",
         "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "gulp-sftp": "*",
         "utility2": "kaizhu256/node-utility2#alpha"
     },
-    "name":"npmdoc-gulp-sftp",
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-gulp-sftp",
+    "keywords": [
+        "documentation",
+        "gulp-sftp"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_gulp_sftp.js",
+    "name": "npmdoc-gulp-sftp",
+    "nameAlias": "npmdoc_gulp_sftp",
+    "nameOriginal": "npmdoc-gulp-sftp",
+    "os": [
+        "darwin",
+        "linux"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/npmdoc/node-npmdoc-gulp-sftp.git"
     },
     "scripts": {
-        "build-ci": "utility2 shReadmeTest build_ci.sh"
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "(set -e; npm install \"kaizhu256/node-utility2#alpha\"; utility2 shDeployHeroku)",
+        "postinstall": "if [ -f npm_scripts.sh ]; then ./npm_scripts.sh postinstall; fi",
+        "start": "(set -e; export PORT=${PORT:-8080}; utility2 start test.js)",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
     },
     "version": "0.0.1"
 }
