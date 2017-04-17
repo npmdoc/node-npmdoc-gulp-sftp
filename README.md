@@ -1,9 +1,11 @@
 # api documentation for  [gulp-sftp (v0.1.5)](https://github.com/gtg092x/gulp-sftp/)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-sftp.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-sftp) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-sftp.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-sftp)
 #### Upload files via SSH
 
-[![NPM](https://nodei.co/npm/gulp-sftp.png?downloads=true)](https://www.npmjs.com/package/gulp-sftp)
+[![NPM](https://nodei.co/npm/gulp-sftp.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-sftp)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-gulp-sftp_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-sftp/build/screenCapture.npmPackageListing.svg)
 
@@ -18,7 +20,6 @@
 {
     "author": {
         "name": "Matthew Drake",
-        "email": "mdrake@mediadrake.com",
         "url": "http://mediadrake.com"
     },
     "bugs": {
@@ -26,24 +27,19 @@
     },
     "contributors": [
         {
-            "name": "Benjamin P. Jung",
-            "email": "headcr4sh@gmail.com"
+            "name": "Benjamin P. Jung"
         },
         {
-            "name": "Carson Britt",
-            "email": "carson28@gmail.com"
+            "name": "Carson Britt"
         },
         {
-            "name": "Matthew Drake",
-            "email": "mdrake@mediadrake.com"
+            "name": "Matthew Drake"
         },
         {
-            "name": "Valan Brown",
-            "email": "github@valanbrown.com"
+            "name": "Valan Brown"
         },
         {
-            "name": "Sorin Guga",
-            "email": "sorin.guga@gmail.com"
+            "name": "Sorin Guga"
         }
     ],
     "dependencies": {
@@ -85,13 +81,11 @@
     "license": "MIT",
     "maintainers": [
         {
-            "name": "gtg092x",
-            "email": "gtg092x@gmail.com"
+            "name": "gtg092x"
         }
     ],
     "name": "gulp-sftp",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/gtg092x/gulp-sftp.git"
@@ -100,16 +94,6 @@
     "version": "0.1.5"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module gulp-sftp](#apidoc.module.gulp-sftp)
-
-
-
-# <a name="apidoc.module.gulp-sftp"></a>[module gulp-sftp](#apidoc.module.gulp-sftp)
 
 
 
