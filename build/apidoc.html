@@ -61,12 +61,223 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-sftp">module gulp-sftp</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-sftp.gulp-sftp">
+            function <span class="apidocSignatureSpan"></span>gulp-sftp
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-sftp.toString">
+            function <span class="apidocSignatureSpan">gulp-sftp.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-sftp.toString">module gulp-sftp.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-sftp.toString.toString">
+            function <span class="apidocSignatureSpan">gulp-sftp.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-sftp" id="apidoc.module.gulp-sftp">module gulp-sftp</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-sftp.gulp-sftp" id="apidoc.element.gulp-sftp.gulp-sftp">
+        function <span class="apidocSignatureSpan"></span>gulp-sftp
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-sftp = function (options) {
+    options = assign({}, options);// credit sindresorhus
+
+
+    if (options.host === undefined) {
+        throw new gutil.PluginError(&#x27;gulp-sftp&#x27;, &#x27;`host` required.&#x27;);
+    }
+
+    var fileCount = 0;
+    var remotePath = options.remotePath || &#x27;/&#x27;;
+    var remotePlatform = options.remotePlatform || options.platform || &#x27;unix&#x27;;
+
+    options.authKey = options.authKey||options.auth;
+    var authFilePath = options.authFile || &#x27;.ftppass&#x27;;
+    var authFile=path.join(&#x27;./&#x27;,authFilePath);
+    if(options.authKey &#x26;&#x26; fs.existsSync(authFile)){
+        var auth = JSON.parse(fs.readFileSync(authFile,&#x27;utf8&#x27;))[options.authKey];
+        if(!auth)
+            this.emit(&#x27;error&#x27;, new gutil.PluginError(&#x27;gulp-sftp&#x27;, &#x27;Could not find authkey in .ftppass&#x27;));
+        if(typeof auth == &#x22;string&#x22; &#x26;&#x26; auth.indexOf(&#x22;:&#x22;)!=-1){
+            var authparts = auth.split(&#x22;:&#x22;);
+            auth = {user:authparts[0],pass:authparts[1]};
+        }
+        for (var attr in auth) { options[attr] = auth[attr]; }
+    }
+
+    //option aliases
+    options.password = options.password||options.pass;
+    options.username = options.username||options.user||&#x27;anonymous&#x27;;
+
+<span class="apidocCodeCommentSpan">    /*
+     * Lots of ways to present key info
+     */
+</span>    var key = options.key || options.keyLocation || null;
+    if(key&#x26;&#x26;typeof key == &#x22;string&#x22;)
+        key = {location:key};
+
+    //check for other options that imply a key or if there is no password
+    if(!key &#x26;&#x26; (options.passphrase||options.keyContents||!options.password)){
+        key = {};
+    }
+
+    if(key){
+
+        //aliases
+        key.contents=key.contents||options.keyContents;
+        key.passphrase=key.passphrase||options.passphrase;
+
+        //defaults
+        key.location=key.location||[&#x22;~/.ssh/id_rsa&#x22;,&#x22;/.ssh/id_rsa&#x22;,&#x22;~/.ssh/id_dsa&#x22;,&#x22;/.ssh/id_dsa&#x22;];
+
+        //type normalization
+        if(!util.isArray(key.location))
+            key.location=[key.location];
+
+        //resolve all home paths
+        if(key.location){
+            var home = process.env.HOME||process.env.USERPROFILE;
+            for(var i=0;i&#x3c;key.location.length;i++)
+                if (key.location[i].substr(0,2) === &#x27;~/&#x27;)
+                    key.location[i] = path.resolve(home,key.location[i].replace(/^~\//,&#x22;&#x22;));
+
+
+            for(var i=0,keyPath;keyPath=key.location[i++];){
+
+
+                if(fs.existsSync(keyPath)){
+                    key.contents = fs.readFileSync(keyPath);
+                    break;
+                }
+            }
+        }else if(!key.contents){
+            this.emit(&#x27;error&#x27;, new gutil.PluginError(&#x27;gulp-sftp&#x27;, &#x27;Cannot find RSA key, searched: &#x27;+key.location.join(&#x27;, &#x27;)));
+        }
+
+
+
+    }
+    /*
+     * End Key normalization, key should now be of form:
+     * {location:Array,passphrase:String,contents:String}
+     * or null
+     */
+
+
+
+
+    var logFiles = options.logFiles === false ? false : true;
+
+
+    delete options.remotePath;
+    delete options.localPath;
+    delete options.user;
+    delete options.pass;
+    delete options.logFiles;
+
+    var mkDirCache = {};
+
+    var finished=false;
+    var sftpCache = null;//sftp connection cache
+    var connectionCache = null;//ssh connection cache
+
+    var pool = function(remotePath, uploader){ // method to get cache or create connection
+
+
+        if(sftpCache)
+            return uploader(sftpCache);
+
+        if(options.password){
+            gutil.log(&#x27;Authenticating with password.&#x27;);
+        }else if(key){
+            gutil.log(&#x27;Authenticating with private key.&#x27;);
+        }
+
+        var c = new Connection();
+        connectionCache = c;
+        c.on(&#x27;ready&#x27;, function() {
+
+            c.sftp(function(err, sftp) {
+                if (err)
+                    throw err;
+
+                sftp.on(&#x27;end&#x27;, function() {
+                    gutil.log(&#x27;SFTP :: SFTP session closed&#x27;);
+                    sftpCache=null;
+                    if(!finished)
+                        this.emit(&#x27;error&#x27;, new gutil.PluginError(&#x27;gulp-sftp&#x27;, &#x22;SFTP abrupt closure&#x22;));
+                });
+
+                sftpCache = sftp;
+                uploader(sftpCache);
+            });//c.sftp
+        });//c.on(&#x27;ready&#x27;)
+
+        var s ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-sftp.toString" id="apidoc.element.gulp-sftp.toString">
+        function <span class="apidocSignatureSpan">gulp-sftp.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-sftp.toString" id="apidoc.module.gulp-sftp.toString">module gulp-sftp.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-sftp.toString.toString" id="apidoc.element.gulp-sftp.toString.toString">
+        function <span class="apidocSignatureSpan">gulp-sftp.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
