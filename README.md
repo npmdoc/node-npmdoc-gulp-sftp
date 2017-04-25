@@ -1,4 +1,7 @@
-# api documentation for  [gulp-sftp (v0.1.5)](https://github.com/gtg092x/gulp-sftp/)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-sftp.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-sftp) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-sftp.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-sftp)
+# npmdoc-gulp-sftp
+
+#### basic api documentation for  [gulp-sftp (v0.1.5)](https://github.com/gtg092x/gulp-sftp/)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-sftp.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-sftp) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-sftp.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-sftp)
+
 #### Upload files via SSH
 
 [![NPM](https://nodei.co/npm/gulp-sftp.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-sftp)
@@ -91,7 +94,8 @@
         "url": "git://github.com/gtg092x/gulp-sftp.git"
     },
     "scripts": {},
-    "version": "0.1.5"
+    "version": "0.1.5",
+    "bin": {}
 }
 ```
 
